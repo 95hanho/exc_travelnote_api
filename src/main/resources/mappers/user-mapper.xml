@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="me._hanho.travelnote.mapper.UserMapper">
+	<select id="getUser">
+		select *
+		from user
+		WHERE member_id = #{member_id} AND member_password = #{member_password}
+	</select>
+	<select id="getToken">
+		select * 
+		from token
+		WHERE refresh_token = #{refresh_token} AND agent = #{agent}
+		AND connect_ip = #{connect_ip} AND member_id = #{member_id}
+	</select>
+	<insert id="insertToken">
+		INSERT INTO token(refresh_token, agent, connect_ip, member_id)
+		VALUES(#{refresh_token}, #{agent}, #{connect_ip}, #{member_id})
+	</insert>
+	<update id="updateToken">
+		UPDATE token
+		SET refresh_token = #{refresh_token}
+		WHERE agent = #{agent} and connect_ip = #{connect_ip} and member_id = #{member_id}
+	</update>
+</mapper>
