@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="me._hanho.travelnote.mapper.NoticeMapper">
+	<select id="getNoticeCount">
+		select count(*)
+		from notice
+	</select>
+	<select id="getNotices">
+		select * 
+		from notice
+		WHERE company_id = #{company_id}
+    	ORDER BY date DESC
+    	LIMIT #{size} OFFSET #{offset}
+	</select>
+	<select id="getNoticeAndPrevNext">
+		SELECT * FROM (
+		  (SELECT * FROM notice WHERE company_id = #{company_id} AND date &lt; (SELECT date FROM notice WHERE id = #{nId}) ORDER BY date DESC LIMIT 1)
+		  UNION ALL
+		  (SELECT * FROM notice WHERE id = #{nId} AND company_id = #{company_id})
+		  UNION ALL
+		  (SELECT * FROM notice WHERE company_id = #{company_id} AND date &gt; (SELECT date FROM notice WHERE id = #{nId}) ORDER BY date ASC LIMIT 1)
+		) AS combined_results
+		ORDER BY date ASC
+	</select>
+</mapper>
