@@ -13,4 +13,6 @@ public interface UserService {
 
 	int updateToken(Token token);
 
+	User getUser(Token token);
+
 }

@@ -13,13 +13,68 @@
     	LIMIT #{size} OFFSET #{offset}
 	</select>
 	<select id="getNoticeAndPrevNext">
-		SELECT * FROM (
-		  (SELECT * FROM notice WHERE company_id = #{company_id} AND date &lt; (SELECT date FROM notice WHERE id = #{nId}) ORDER BY date DESC LIMIT 1)
-		  UNION ALL
-		  (SELECT * FROM notice WHERE id = #{nId} AND company_id = #{company_id})
-		  UNION ALL
-		  (SELECT * FROM notice WHERE company_id = #{company_id} AND date &gt; (SELECT date FROM notice WHERE id = #{nId}) ORDER BY date ASC LIMIT 1)
-		) AS combined_results
+		WITH RankedNotices AS (
+		    SELECT 
+		        id, 
+		        title, 
+		        date, 
+		        content, 
+		        company_id, 
+		        ROW_NUMBER() OVER (PARTITION BY company_id ORDER BY date ASC) AS row_num
+		    FROM notice
+		    WHERE company_id = #{company_id}
+		),
+		TargetNotice AS (
+		    SELECT 
+		        id, 
+		        title, 
+		        date, 
+		        content, 
+		        company_id, 
+		        row_num,
+		        CEIL(row_num / 8.0) AS this_page -- 페이지 계산 (1-based)
+		    FROM RankedNotices
+		    WHERE id = #{nId}
+		),
+		CombinedResults AS (
+		    SELECT * FROM (
+		        -- 이전 글
+		        SELECT 
+		            R.id, 
+		            R.title, 
+		            R.date, 
+		            R.content, 
+		            R.company_id,
+		            CEIL(R.row_num / 8.0) AS this_page
+		        FROM RankedNotices R
+		        WHERE R.company_id = #{company_id}
+		          AND R.row_num = (SELECT row_num - 1 FROM TargetNotice)
+		        UNION ALL
+		        -- 현재 글
+		        SELECT 
+		            T.id, 
+		            T.title, 
+		            T.date, 
+		            T.content, 
+		            T.company_id,
+		            T.this_page
+		        FROM TargetNotice T
+		        UNION ALL
+		        -- 다음 글
+		        SELECT 
+		            R.id, 
+		            R.title, 
+		            R.date, 
+		            R.content, 
+		            R.company_id,
+		            CEIL(R.row_num / 8.0) AS this_page
+		        FROM RankedNotices R
+		        WHERE R.company_id = #{company_id}
+		          AND R.row_num = (SELECT row_num + 1 FROM TargetNotice)
+		    ) AS temp_results
+		)
+		SELECT * 
+		FROM CombinedResults
 		ORDER BY date ASC
 	</select>
 </mapper>

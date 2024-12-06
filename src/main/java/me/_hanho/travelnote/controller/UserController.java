@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import me._hanho.travelnote.model.Token;
 import me._hanho.travelnote.model.User;
@@ -41,8 +42,8 @@ public class UserController {
 		if(checkUser != null) {
 			User onlyId = new User();
 			onlyId.setMember_id(checkUser.getMember_id());
-			String accessToken = tokenService.makeJwtToken(60L, onlyId);
-			String refreshToken = tokenService.makeJwtToken(180L);
+			String accessToken = tokenService.makeJwtToken(63L, onlyId);
+			String refreshToken = tokenService.makeJwtToken(183L);
 			String ipAddress = request.getRemoteAddr();
 			Token token = new Token(refreshToken, agent, ipAddress, checkUser.getMember_id());
 			Token checkToken = userService.getToken(token);
@@ -73,6 +74,49 @@ public class UserController {
 			return new ResponseEntity<>(
 					result
 					, HttpStatus.OK);
+		}
+	}
+	
+	@PostMapping("/re-generator/refresh/token")
+	public ResponseEntity<Map<String, Object>> reToken(@RequestParam("refresh_token") String refresh_token,
+			HttpServletRequest request, @RequestHeader("user-agent") String agent) {
+		System.out.println("reToken " + refresh_token);
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		Claims claims = null;
+		try {
+			claims = tokenService.parseJwtToken(refresh_token);
+		} catch (Exception e) {
+			result.put("msg", "token제대로 안됨");
+			return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
+		}
+		
+		if(claims != null) {
+			String ipAddress = request.getRemoteAddr();
+			Token token = new Token(refresh_token, agent, ipAddress);
+			User checkUser = userService.getUser(token);
+			
+			if(checkUser != null) {
+				User onlyId = new User();
+				onlyId.setMember_id(checkUser.getMember_id());
+				String accessToken = tokenService.makeJwtToken(63L, onlyId);
+				String refreshToken = tokenService.makeJwtToken(183L);
+				Token token2 = new Token(refreshToken, agent, ipAddress, checkUser.getMember_id());
+				int result_count = userService.updateToken(token2);
+				
+				result.put("msg", "access 토큰 재발급 성공");
+				result.put("access_token", accessToken);
+				result.put("refresh_token", refreshToken);
+				result.put("response_code", 200);
+				result.put("status", "success");
+				return new ResponseEntity<>(result, HttpStatus.OK);
+			} else {
+				result.put("msg", "token제대로 안됨");
+				return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
+			}
+		} else {
+			result.put("msg", "token제대로 안됨");
+			return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
 		}
 	}
 	

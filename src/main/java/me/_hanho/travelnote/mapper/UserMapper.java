@@ -16,4 +16,6 @@ public interface UserMapper {
 
 	int updateToken(Token token);
 
+	User getUser2(Token token);
+
 }

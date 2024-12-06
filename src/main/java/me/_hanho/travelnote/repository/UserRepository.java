@@ -29,4 +29,8 @@ public class UserRepository {
 		return userMapper.updateToken(token);
 	}
 
+	public User getUser(Token token) {
+		return userMapper.getUser2(token);
+	}
+
 }

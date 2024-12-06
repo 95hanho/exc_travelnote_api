@@ -33,4 +33,9 @@ public class UserServiceImpl implements UserService {
 		return UserDAO.updateToken(token);
 	}
 
+	@Override
+	public User getUser(Token token) {
+		return UserDAO.getUser(token);
+	}
+
 }

@@ -19,6 +19,12 @@
 	<update id="updateToken">
 		UPDATE token
 		SET refresh_token = #{refresh_token}
-		WHERE agent = #{agent} and connect_ip = #{connect_ip} and member_id = #{member_id}
+		WHERE agent = #{agent} AND connect_ip = #{connect_ip} AND member_id = #{member_id}
 	</update>
+	<select id="getUser2">
+		select u.member_id, u.company_id
+		from user u
+		JOIN token t ON u.member_id = t.member_id 
+		WHERE refresh_token = #{refresh_token} AND agent = #{agent} AND connect_ip = #{connect_ip}
+	</select>
 </mapper>

@@ -14,6 +14,13 @@ public class Token {
 	public Token() {
 	}
 	
+	public Token(String refresh_token, String agent, String connect_ip) {
+		super();
+		this.refresh_token = refresh_token;
+		this.agent = agent;
+		this.connect_ip = connect_ip;
+	}
+	
 	public Token(String refresh_token, String agent, String connect_ip, String member_id) {
 		super();
 		this.refresh_token = refresh_token;

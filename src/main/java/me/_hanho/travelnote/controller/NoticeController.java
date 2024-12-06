@@ -77,14 +77,13 @@ public class NoticeController {
 			curNotice = list.get(0);
 		}
 		
-		result.put("id", "");
-		result.put("title", "");
-		result.put("content", "");
-		result.put("date", "");
-		result.put("title", "");
+		result.put("id", curNotice.getId());
+		result.put("title", curNotice.getTitle());
+		result.put("content", curNotice.getContent());
+		result.put("date", curNotice.getDate());
 		result.put("msg", "조회 완료");
-		result.put("nextInfo", "success");
-		result.put("prevInfo", "success");
+		result.put("nextInfo", nextNotice);
+		result.put("prevInfo", prevNotice);
 		result.put("response_code", 200);
 		result.put("status", "success");
 		return new ResponseEntity<>(result, HttpStatus.OK);

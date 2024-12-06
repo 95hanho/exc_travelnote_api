@@ -7,6 +7,7 @@ public class Notice {
 	private int id;
 	private String title;
 	private Date date;
+	private int this_page;
 	private String content;
 	private int company_id;
 	
@@ -19,6 +20,16 @@ public class Notice {
 		this.id = id;
 		this.title = title;
 		this.date = date;
+		this.content = content;
+		this.company_id = company_id;
+	}
+	
+	public Notice(int id, String title, Date date, int this_page, String content, int company_id) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.date = date;
+		this.this_page = this_page;
 		this.content = content;
 		this.company_id = company_id;
 	}
@@ -63,10 +74,17 @@ public class Notice {
 		this.company_id = company_id;
 	}
 
+	public int getThis_page() {
+		return this_page;
+	}
+
+	public void setThis_page(int this_page) {
+		this.this_page = this_page;
+	}
+
 	@Override
 	public String toString() {
-		return "Notice [id=" + id + ", title=" + title + ", date=" + date + ", content=" + content + ", company_id="
-				+ company_id + "]";
+		return "Notice [id=" + id + ", title=" + title + ", date=" + date + ", this_page=" + this_page + ", content="
+				+ content + ", company_id=" + company_id + "]";
 	}
-	
 }
