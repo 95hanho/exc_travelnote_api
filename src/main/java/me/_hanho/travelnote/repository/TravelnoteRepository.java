@@ -46,5 +46,9 @@ public class TravelnoteRepository {
 		return travelnoteMapper.getdescripImgs(id);
 	}
 
+	public void setQuestionText(String answer_text_data, int question_id) {
+		travelnoteMapper.setQuestionText(answer_text_data, question_id);
+	}
+
 	
 }

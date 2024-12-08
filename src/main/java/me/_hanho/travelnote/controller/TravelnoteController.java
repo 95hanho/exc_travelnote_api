@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +20,7 @@ import me._hanho.travelnote.model.Company;
 import me._hanho.travelnote.model.Question;
 import me._hanho.travelnote.model.Travelnote;
 import me._hanho.travelnote.service.CompanyService;
+import me._hanho.travelnote.service.FileService;
 import me._hanho.travelnote.service.TravelnoteService;
 
 @RestController
@@ -32,6 +32,9 @@ public class TravelnoteController {
 	
 	@Autowired
 	private CompanyService companyService;
+	
+	@Autowired
+	private FileService fileService;
 
 	@GetMapping("/list")
 	public ResponseEntity<Map<String, Object>> getTravelnotes(@RequestParam("company_id") int company_id) {
@@ -61,7 +64,7 @@ public class TravelnoteController {
 		result.put("list", list);
 		result.put("msg", "목록 조회 완료");
 		result.put("response_code", 200);
-		result.put("msg", "success");
+		result.put("status", "success");
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
@@ -90,17 +93,29 @@ public class TravelnoteController {
 		
 		result.put("msg", "목록 조회 완료");
 		result.put("response_code", 200);
-		result.put("msg", "조회 완료");
+		result.put("status", "success");
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@PostMapping("/content")
-	public ResponseEntity<Map<String, Object>> saveTravel(@ModelAttribute Travelnote travelnote,
+	public ResponseEntity<Map<String, Object>> saveTravel(@RequestParam(value="answer_text_data", required=false) String answer_text_data,
+			@RequestParam("question_id") int question_id,
+			@RequestParam("company_id") int company_id,
 			@RequestParam(value="answer_img_data", required=false) MultipartFile file) {
 		System.out.println("saveTravel");
 		Map<String, Object> result = new HashMap<String, Object>();
 
-		result.put("msg", "success");
+		if(answer_text_data != null) {
+			travelnoteService.setQuestionText(answer_text_data, question_id);
+		}
+		if(file != null) {
+			System.out.println(file);
+			fileService.setQuestionFile(file, question_id);
+		}
+		
+ 		result.put("msg", "수정 완료");
+		result.put("response_code", 200);
+		result.put("status", "success");
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	

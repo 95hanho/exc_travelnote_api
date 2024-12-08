@@ -35,6 +35,11 @@ public class TravelnoteImpl implements TravelnoteService {
 		return travelnoteDAO.getdescripImgs(id);
 	}
 
+	@Override
+	public void setQuestionText(String answer_text_data, int question_id) {
+		travelnoteDAO.setQuestionText(answer_text_data, question_id);
+	}
+
 
 	
 }

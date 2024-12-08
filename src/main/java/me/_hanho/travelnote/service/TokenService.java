@@ -52,7 +52,7 @@ public class TokenService {
 				.setIssuer("myteam")
 				.setIssuedAt(now)
 				.setExpiration(expire)
-				.claim("login_id", user.getMember_id())
+				.claim("member_id", user.getMember_id())
 //				.claim("nickName", user.getNickName())
 //				.claim("createDate", user.getCreateDate())
 				.signWith(key)

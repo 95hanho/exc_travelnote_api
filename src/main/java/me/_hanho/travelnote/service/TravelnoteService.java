@@ -15,5 +15,7 @@ public interface TravelnoteService {
 
 	List<String> getdescripImgs(int id);
 
+	void setQuestionText(String answer_text_data, int question_id);
+
 
 }

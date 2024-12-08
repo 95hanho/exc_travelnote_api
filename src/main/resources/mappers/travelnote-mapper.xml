@@ -30,5 +30,10 @@
 		FROM file
 		WHERE question_id = #{id}
 	</select>
+	<update id="setQuestionText">
+		UPDATE question
+		SET contents = #{answer_text_data}
+		WHERE id = #{question_id}
+	</update>
 </mapper>
 

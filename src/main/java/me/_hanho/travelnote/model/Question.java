@@ -1,7 +1,5 @@
 package me._hanho.travelnote.model;
 
-import java.util.Map;
-
 public class Question {
 
 	private int id;
