@@ -15,8 +15,10 @@ import me._hanho.travelnote.repository.FileRepository;
 @Service
 public class FileServiceImpl implements FileService {
 
+	// application.properties에 선언된 파일 저장 경로
+	// ex) "/files/{프로젝트이름}/"
 	@Value("${spring.servlet.multipart.location}")
-    private String uploadDir;
+    private String uploadDir; 
 	
 	@Autowired
 	private FileRepository fileDAO;
@@ -79,6 +81,4 @@ public class FileServiceImpl implements FileService {
             return false;
         }
 	}
-
-	
 }

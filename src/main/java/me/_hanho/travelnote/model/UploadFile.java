@@ -2,18 +2,16 @@ package me._hanho.travelnote.model;
 
 public class UploadFile {
 	
-	// file_num, name, filePath, type, company_id, lecture_idx, question_id
-	
 	private int file_num;
 	private String name;
 	private String filePath;
+	
 	private String type;
 	private int company_id;
 	private int lecture_idx;
 	private int question_id;
 	
 	private String program_detail_img_url;
-	
 	
 	public UploadFile() {
 	}
