@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="me._hanho.travelnote.mapper.FileMapper">
+	<select id="getFiles">
+        SELECT * FROM travelnote_file
+        WHERE question_id = #{question_id}
+    </select>
+    <update id="updateFile">
+		UPDATE travelnote_file
+		SET name = #{name}, filePath = #{filePath}
+		WHERE question_id = #{question_id}
+	</update>
+	<insert id="createFile">
+		INSERT INTO travelnote_file(name, filePath, question_id)
+		VALUES (#{name}, #{filePath}, #{question_id})
+	</insert>
+</mapper>

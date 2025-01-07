@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="me._hanho.travelnote.mapper.NoticeMapper">
+	<select id="getNoticeCount">
+		select count(*)
+		from travelnote_notice
+	</select>
+	<select id="getNotices">
+		select * 
+		from travelnote_notice
+		WHERE company_id = #{company_id}
+    	ORDER BY date DESC
+    	LIMIT #{size} OFFSET #{offset}
+	</select>
+	<select id="getNoticeAndPrevNext">
+		SELECT * 
+		FROM (
+		    -- 이전 글
+		    SELECT 
+		        R.id, 
+		        R.title, 
+		        R.date, 
+		        R.content, 
+		        R.company_id,
+		        CEIL(R.row_num / 8.0) AS this_page
+		    FROM (
+		        SELECT  
+		            id, 
+		            title, 
+		            date, 
+		            content, 
+		            company_id,
+		            @row_num := @row_num + 1 AS row_num
+		        FROM (
+		            SELECT * 
+		            FROM travelnote_notice
+		            WHERE company_id = #{company_id}
+		            ORDER BY date ASC
+		        ) AS sorted_notices, (SELECT @row_num := 0) AS init
+		    ) R
+		    WHERE R.row_num = (
+		        SELECT TargetNotice.row_num - 1
+		        FROM (
+		            SELECT 
+		                id,
+		                title,
+		                date,
+		                content,
+		                company_id,
+		                @target_row_num := @target_row_num + 1 AS row_num
+		            FROM (
+		                SELECT * 
+		                FROM travelnote_notice
+		                WHERE company_id = #{company_id}
+		                ORDER BY date ASC
+		            ) AS sorted_target, (SELECT @target_row_num := 0) AS init_target
+		            WHERE id = #{nId}
+		        ) TargetNotice
+		    )
+		    UNION ALL
+		    -- 현재 글
+		    SELECT 
+		        TargetNotice.id, 
+		        TargetNotice.title,  
+		        TargetNotice.date, 
+		        TargetNotice.content, 
+		        TargetNotice.company_id,
+		        CEIL(TargetNotice.row_num / 8.0) AS this_page
+		    FROM (
+		        SELECT 
+		            id,
+		            title,
+		            date,
+		            content,
+		            company_id,
+		            @target_row_num := @target_row_num + 1 AS row_num
+		        FROM (
+		            SELECT * 
+		            FROM travelnote_notice
+		            WHERE company_id = #{company_id}
+		            ORDER BY date ASC
+		        ) AS sorted_target, (SELECT @target_row_num := 0) AS init_target
+		    ) TargetNotice
+		    WHERE TargetNotice.id = #{nId}
+		    UNION ALL
+		    -- 다음 글
+		    SELECT 
+		        R.id, 
+		        R.title, 
+		        R.date, 
+		        R.content, 
+		        R.company_id,
+		        CEIL(R.row_num / 8.0) AS this_page
+		    FROM (
+		        SELECT  
+		            id, 
+		            title, 
+		            date, 
+		            content, 
+		            company_id,
+		            @row_num := @row_num + 1 AS row_num
+		        FROM (
+		            SELECT * 
+		            FROM travelnote_notice
+		            WHERE company_id = #{company_id}
+		            ORDER BY date ASC
+		        ) AS sorted_notices, (SELECT @row_num := 0) AS init
+		    ) R
+		    WHERE R.row_num = (
+		        SELECT TargetNotice.row_num + 1
+		        FROM (
+		            SELECT 
+		                id,
+		                title,
+		                date,
+		                content,
+		                company_id,
+		                @target_row_num := @target_row_num + 1 AS row_num
+		            FROM (
+		                SELECT * 
+		                FROM travelnote_notice
+		                WHERE company_id = #{company_id}
+		                ORDER BY date ASC
+		            ) AS sorted_target, (SELECT @target_row_num := 0) AS init_target
+		            WHERE id = #{nId}
+		        ) TargetNotice
+		    )
+		) CombinedResults
+		ORDER BY date ASC;
+	</select>
+</mapper>

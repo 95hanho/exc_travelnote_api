@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="me._hanho.travelnote.mapper.CompanyMapper">
+	<select id="getCompanyInfo">
+        SELECT * FROM travelnote_company 
+        WHERE company_url = #{company_url}
+    </select>
+    <select id="getCompanyInfo2">
+		SELECT * FROM travelnote_company
+		WHERE company_id = #{company_id}
+	</select>
+	<select id="getMenus">
+		SELECT *
+		FROM travelnote_menu
+		WHERE company_id = #{company_id}
+	</select>
+</mapper>

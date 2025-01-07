@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="me._hanho.travelnote.mapper.TravelnoteMapper">
+	<select id="getTravelnotes">
+        SELECT lecture_idx, program_description, program_title, week, t.s_id, s.sc_date
+        FROM travelnote t
+        JOIN travelnote_schedule s ON s.s_id = t.s_id
+        WHERE s.company_id = #{company_id}
+        ORDER BY s.sc_date ASC
+    </select>
+    
+    <select id="getTravelnote">
+		SELECT lecture_idx, program_description, program_title, week, t.s_id, s.sc_date, s.company_id
+		FROM travelnote t
+		JOIN travelnote_schedule s ON s.s_id = t.s_id
+		WHERE lecture_idx = #{id}
+	</select>
+    <select id="getQuestions">
+		SELECT *
+		FROM travelnote_question
+		WHERE lecture_idx = #{id}
+	</select>
+	<select id="getdescripImgs">
+		SELECT filePath
+		FROM travelnote_file
+		WHERE lecture_idx = #{id}
+	</select>
+	<select id="getAnswerFilepath">
+		SELECT filePath
+		FROM travelnote_file
+		WHERE question_id = #{id}
+	</select>
+	<update id="setQuestionText">
+		UPDATE travelnote_question
+		SET contents = #{answer_text_data}
+		WHERE id = #{question_id}
+	</update>
+</mapper>
+

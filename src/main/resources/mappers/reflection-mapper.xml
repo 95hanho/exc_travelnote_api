@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="me._hanho.travelnote.mapper.ReflectionMapper">
+	<select id="getReflections">
+        SELECT s_id AS sc_id, sc_date AS sc_datetime, reflection_content
+		FROM travelnote_schedule
+		WHERE company_id = #{company_id}
+    </select>
+    <update id="setReflection">
+		UPDATE travelnote_schedule
+		SET reflection_content = #{reflection_content}
+		WHERE s_id = #{sc_id}
+	</update>
+</mapper>
