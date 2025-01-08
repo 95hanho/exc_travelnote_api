@@ -1,0 +1,63 @@
+@charset "UTF-8";
+/* how to use transition ⬇️⬇️
+  @include transition(background-color .3s ease-in-out);
+*/
+/*
+
+  @include keyframe(animation-slide-in-up) {
+    0% {
+      transform: translate(0,100%);
+    }
+
+    100% {
+      transform: translate(0,0);
+    }
+  }
+ .animation-slide-in-up{
+   @include animation(0, 0.5s, animation-slide-in-up, ease);
+ }
+
+*/
+/*
+* Noto Sans KR (korean) http://www.google.com../fonts/earlyaccess
+ */
+@font-face {
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 100;
+  src: url(../font/NotoSansKR-Thin.woff2) format("font-woff2"),
+    url(../font/NotoSansKR-Thin.woff) format("woff"),
+    url(../font/NotoSansKR-Thin.otf) format("opentype");
+}
+@font-face {
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 300;
+  src: url(../font/NotoSansKR-Light.woff2) format("font-woff2"),
+    url(../font/NotoSansKR-Light.woff) format("font-woff"),
+    url(../font/NotoSansKR-Light.otf) format("font-opentype");
+}
+@font-face {
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 400;
+  src: url(../font/NotoSansKR-Regular.woff2) format("font-woff2"),
+    url(../font/NotoSansKR-Regular.woff) format("woff"),
+    url(../font/NotoSansKR-Regular.otf) format("opentype");
+}
+@font-face {
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 500;
+  src: url(../font/NotoSansKR-Medium.woff2) format("font-woff2"),
+    url(../font/NotoSansKR-Medium.woff) format("woff"),
+    url(../font/NotoSansKR-Medium.otf) format("opentype");
+}
+@font-face {
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 700;
+  src: url(../font/NotoSansKR-Bold.woff2) format("font-woff2"),
+    url(../font/NotoSansKR-Bold.woff) format("woff"),
+    url(../font/NotoSansKR-Bold.otf) format("opentype");
+}
